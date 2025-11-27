@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Nearby - Tu espacio ideal, a un clic del campus. Plataforma de búsqueda de alojamiento para estudiantes de la Universidad del Magdalena.">
+    <title>Nearby - Tu espacio ideal, a un clic del campus</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Leaflet CSS for maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="#" class="logo" onclick="showSection('home')">
+                    <img src="assets/logo.png" alt="Nearby Logo">
+                    <span>Nearby</span>
+                </a>
+
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#" onclick="showSection('home')">Inicio</a></li>
+                    <li><a href="#" onclick="showSection('properties')">Alojamientos</a></li>
+                    <li class="auth-only hidden"><a href="#" onclick="showSection('favorites')">Favoritos</a></li>
+                    <li class="auth-only hidden"><a href="#" onclick="showSection('chat')">💬 Chat</a></li>
+                    <li class="owner-only hidden"><a href="#" onclick="showSection('my-properties')">Mis Propiedades</a>
+                    </li>
+                    <li class="guest-only"><a href="#" onclick="openModal('loginModal')">Iniciar Sesión</a></li>
+                    <li class="guest-only"><a href="#" class="btn btn-primary"
+                            onclick="openModal('registerModal')">Registrarse</a></li>
+                    <li class="auth-only hidden"><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="homeSection">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Tu espacio ideal, a un clic del campus</h1>
+                <p>Encuentra el alojamiento perfecto cerca de la Universidad del Magdalena. Seguro, verificado y
+                    fácil.
+                </p>
+
+                <div class="search-box">
+                    <input type="text" id="heroSearch" placeholder="Buscar por ubicación, tipo de propiedad..."
+                        onkeyup="handleHeroSearch(event)">
+                    <button class="btn btn-primary" onclick="searchFromHero()">
+                        <span>🔍</span> Buscar
+                    </button>
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                    <button class="btn btn-primary" onclick="showSection('properties')">
+                        Explorar Alojamientos
+                    </button>
+                    <button class="btn btn-secondary owner-only hidden" onclick="openModal('createPropertyModal')">
+                        Publicar Propiedad
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Properties Section -->
+    <section class="properties-section hidden" id="propertiesSection">
+        <div class="container">
+            <div class="section-header">
+                <h2>Alojamientos Disponibles</h2>
+                <p>Encuentra tu hogar ideal cerca del campus</p>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <select class="filter-btn" id="filterType" onchange="applyFilters()">
+                    <option value="">Todos los tipos</option>
+                    <option value="apartment">Apartamento</option>
+                    <option value="house">Casa</option>
+                    <option value="room">Habitación</option>
+                    <option value="studio">Estudio</option>
+                </select>
+
+                <select class="filter-btn" id="filterBedrooms" onchange="applyFilters()">
+                    <option value="">Habitaciones</option>
+                    <option value="1">1+</option>
+                    <option value="2">2+</option>
+                    <option value="3">3+</option>
+                </select>
+
+                <select class="filter-btn" id="filterPrice" onchange="applyFilters()">
+                    <option value="">Precio</option>
+                    <option value="0-500000">Hasta $500,000</option>
+                    <option value="500000-1000000">$500,000 - $1,000,000</option>
+                    <option value="1000000-1500000">$1,000,000 - $1,500,000</option>
+                    <option value="1500000-999999999">Más de $1,500,000</option>
+                </select>
+
+                <input type="text" class="filter-btn" id="filterSearch" placeholder="Buscar..." onkeyup="applyFilters()"
+                    style="min-width: 200px;">
+            </div>
+
+            <!-- Properties Grid -->
+            <div class="properties-grid" id="propertiesGrid">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Favorites Section -->
+    <section class="properties-section hidden" id="favoritesSection">
+        <div class="container">
+            <div class="section-header">
+                <h2>Mis Favoritos</h2>
+                <p>Propiedades que has guardado</p>
+            </div>
+
+            <div class="properties-grid" id="favoritesGrid">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- My Properties Section (Owner Only) -->
+    <section class="properties-section hidden" id="myPropertiesSection">
+        <div class="container">
+            <div class="section-header">
+                <h2>Mis Propiedades</h2>
+                <p>Gestiona tus publicaciones</p>
+                <button class="btn btn-primary" onclick="openModal('createPropertyModal')">
+                    + Nueva Propiedad
+                </button>
+            </div>
+
+            <div class="properties-grid" id="myPropertiesGrid">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chat Section -->
+    <section class="properties-section hidden" id="chatSection">
+        <div class="container">
+            <div class="section-header">
+                <h2>💬 Mensajes</h2>
+                <p>Conversaciones con propietarios y estudiantes</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 300px 1fr; gap: var(--spacing-lg); min-height: 600px;">
+                <!-- Chat Rooms List -->
+                <div class="glass-card" style="padding: var(--spacing-md); overflow-y: auto;">
+                    <h4 style="margin-bottom: var(--spacing-md);">Conversaciones</h4>
+                    <div id="chatRoomsList">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+
+                <!-- Chat Messages -->
+                <div class="glass-card" style="padding: 0; display: flex; flex-direction: column;">
+                    <div id="chatHeader"
+                        style="padding: var(--spacing-md); border-bottom: 1px solid rgba(139, 92, 246, 0.2);">
+                        <p style="color: var(--text-muted);">Selecciona una conversación</p>
+                    </div>
+                    <div id="chatMessages"
+                        style="flex: 1; padding: var(--spacing-md); overflow-y: auto; max-height: 450px;">
+                        <!-- Messages will appear here -->
+                    </div>
+                    <div id="chatInput" class="hidden"
+                        style="padding: var(--spacing-md); border-top: 1px solid rgba(139, 92, 246, 0.2);">
+                        <div style="display: flex; gap: var(--spacing-sm);">
+                            <input type="text" id="messageInput" class="form-control"
+                                placeholder="Escribe un mensaje..." onkeypress="handleMessageKeyPress(event)">
+                            <button class="btn btn-primary" onclick="sendChatMessage()">Enviar</button>
+                        </div>
+                        <div id="typingIndicator" class="hidden"
+                            style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">
+                            <em>Escribiendo...</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Iniciar Sesión</h3>
+                <button class="close-btn" onclick="closeModal('loginModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Correo Electrónico</label>
+                        <input type="email" class="form-control" name="email" required placeholder="tu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" class="form-control" name="password" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Iniciar Sesión</button>
+                </form>
+                <p class="text-center mt-2" style="color: var(--text-muted);">
+                    ¿No tienes cuenta? <a href="#" onclick="closeModal('loginModal'); openModal('registerModal')"
+                        style="color: var(--primary-purple-light);">Regístrate aquí</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Crear Cuenta</h3>
+                <button class="close-btn" onclick="closeModal('registerModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="registerForm" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>Nombre Completo</label>
+                        <input type="text" class="form-control" name="full_name" required placeholder="Juan Pérez">
+                    </div>
+                    <div class="form-group">
+                        <label>Correo Electrónico</label>
+                        <input type="email" class="form-control" name="email" required placeholder="tu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="tel" class="form-control" name="phone" placeholder="+57 300 123 4567">
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Usuario</label>
+                        <select class="form-control" name="user_type" required onchange="toggleStudentId(this.value)">
+                            <option value="">Seleccionar...</option>
+                            <option value="student">Estudiante</option>
+                            <option value="owner">Propietario</option>
+                        </select>
+                    </div>
+                    <div class="form-group hidden" id="studentIdGroup">
+                        <label>ID Estudiantil</label>
+                        <input type="text" class="form-control" name="student_id" placeholder="2024XXXXXX">
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" class="form-control" name="password" required placeholder="••••••••"
+                            minlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Registrarse</button>
+                </form>
+                <p class="text-center mt-2" style="color: var(--text-muted);">
+                    ¿Ya tienes cuenta? <a href="#" onclick="closeModal('registerModal'); openModal('loginModal')"
+                        style="color: var(--primary-purple-light);">Inicia sesión aquí</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Property Modal -->
+    <div class="modal" id="createPropertyModal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h3>Publicar Nueva Propiedad</h3>
+                <button class="close-btn" onclick="closeModal('createPropertyModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createPropertyForm" onsubmit="handleCreateProperty(event)">
+                    <div class="form-group">
+                        <label>Título</label>
+                        <input type="text" class="form-control" name="title" required
+                            placeholder="Ej: Apartamento cerca del campus">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Descripción</label>
+                        <textarea class="form-control" name="description" required
+                            placeholder="Describe tu propiedad..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Dirección</label>
+                        <input type="text" class="form-control" name="address" required placeholder="Calle 123 #45-67">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Barrio</label>
+                        <input type="text" class="form-control" name="neighborhood" placeholder="Ej: Centro, Mamatoco">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>Tipo de Propiedad</label>
+                            <select class="form-control" name="property_type" required>
+                                <option value="">Seleccionar...</option>
+                                <option value="apartment">Apartamento</option>
+                                <option value="house">Casa</option>
+                                <option value="room">Habitación</option>
+                                <option value="studio">Estudio</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Precio Mensual (COP)</label>
+                            <input type="number" class="form-control" name="price" required placeholder="500000">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>Habitaciones</label>
+                            <input type="number" class="form-control" name="bedrooms" min="0" placeholder="2">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Baños</label>
+                            <input type="number" class="form-control" name="bathrooms" min="0" step="0.5"
+                                placeholder="1">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Área (m²)</label>
+                            <input type="number" class="form-control" name="area_sqm" min="0" placeholder="50">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Amenidades (separadas por coma)</label>
+                        <input type="text" class="form-control" name="amenities"
+                            placeholder="WiFi, Cocina, Lavadora, Aire acondicionado">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Imágenes</label>
+                        <input type="file" class="form-control" name="images" multiple accept="image/*"
+                            id="propertyImages">
+                        <small style="color: var(--text-muted);">Puedes seleccionar hasta 10 imágenes</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Publicar
+                        Propiedad</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Property Detail Modal -->
+    <div class="modal" id="propertyDetailModal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3 id="detailTitle">Detalles de la Propiedad</h3>
+                <button class="close-btn" onclick="closeModal('propertyDetailModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="propertyDetailContent">
+                <!-- Content will be dynamically loaded -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div class="modal" id="reviewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Dejar Reseña</h3>
+                <button class="close-btn" onclick="closeModal('reviewModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="reviewForm" onsubmit="handleSubmitReview(event)">
+                    <input type="hidden" id="reviewPropertyId" name="property_id">
+
+                    <div class="form-group">
+                        <label>Calificación</label>
+                        <div class="star-rating" id="starRating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                        <input type="hidden" id="ratingValue" name="rating" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Comentario (opcional)</label>
+                        <textarea class="form-control" name="comment"
+                            placeholder="Comparte tu experiencia..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Publicar Reseña</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Socket.IO Client -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Chat & Reviews JS -->
+    <script src="js/chat-reviews.js"></script>
+
+    <!-- Custom JS -->
+    <script src="js/app.js"></script>
+</body>
+
+</html>
