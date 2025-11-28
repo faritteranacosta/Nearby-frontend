@@ -9,7 +9,7 @@ let propertiesState = {
 
 
 // Get API_URL from global scope
-const API_URL = window.API_URL || 'http://localhost:3000/api';
+const API_URL = window.API_URL || CONFIG.API_URL;
 
 // Load properties with filters
 export async function loadProperties(filters = {}) {

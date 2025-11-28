@@ -1,5 +1,7 @@
+import CONFIG from '../assets/js/config.js';
+
 // Configuration
-const API_URL = 'http://localhost:3000/api';
+const API_URL = CONFIG.API_URL;
 
 // State management
 let state = {
@@ -141,7 +143,7 @@ async function handleLogin(event) {
     }
 }
 
-async function handleRegister(event) {  
+async function handleRegister(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
@@ -154,9 +156,9 @@ async function handleRegister(event) {
         state.user = response.user;
         saveUserToStorage();
         updateUI();
-        
+
         console.log('✅ Usuario registrado:', state.user);
-        
+
         // Initialize Socket.IO for chat
         if (typeof initializeSocket === 'function') {
             initializeSocket();

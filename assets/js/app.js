@@ -1,11 +1,12 @@
 import { loadInitialComponents, initializeUI } from './ui.js';
+import CONFIG from './config.js';
 
 // Module cache for dynamic imports
 let authModule = null;
 let propertiesModule = null;
 
 // Configuration
-const API_URL = 'http://localhost:3000/api';
+const API_URL = CONFIG.API_URL;
 
 // Make API_URL globally accessible
 window.API_URL = API_URL;

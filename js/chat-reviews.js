@@ -1,3 +1,5 @@
+import CONFIG from '../assets/js/config.js';
+
 // Socket.IO connection
 let socket = null;
 let currentRoom = null;
@@ -21,7 +23,7 @@ async function initializeSocket() {
     const authState = window.getAuthState ? await window.getAuthState() : null;
     if (!authState || !authState.token) return;
 
-    socket = io('http://localhost:3000', {
+    socket = io(CONFIG.SOCKET_URL, {
         auth: {
             token: authState.token
         }
