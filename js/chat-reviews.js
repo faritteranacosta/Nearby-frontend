@@ -1,4 +1,4 @@
-import CONFIG from '../assets/js/config.js';
+import CONFIG from '../assets/config/config.js';
 
 // Socket.IO connection
 let socket = null;

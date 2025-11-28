@@ -1,5 +1,5 @@
 import { loadInitialComponents, initializeUI } from './ui.js';
-import CONFIG from './config.js';
+import CONFIG from '../config/config.js';
 
 // Module cache for dynamic imports
 let authModule = null;
