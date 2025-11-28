@@ -1,7 +1,3 @@
-// ============================================
-// AUTH.JS - Authentication Module
-// ============================================
-
 import { showNotification } from './ui.js';
 import { showSection } from './ui.js';
 
