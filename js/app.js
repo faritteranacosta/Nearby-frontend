@@ -1,5 +1,5 @@
 // Configuration
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'https://backend-nearby-86jj.onrender.com/api';
 
 // State management
 let state = {
