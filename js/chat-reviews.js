@@ -21,7 +21,7 @@ function initializeSocket() {
     const authState = window.getAuthState ? window.getAuthState() : null;
     if (!authState || !authState.token) return;
 
-    socket = io('http://localhost:3000', {
+    socket = io('https://backend-nearby-86jj.onrender.com', {
         auth: {
             token: authState.token
         }
