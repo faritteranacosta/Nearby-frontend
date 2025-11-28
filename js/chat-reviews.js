@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeStarRating();
 
     // Wait a bit for state to be loaded
-    setTimeout(() => {
-        const authState = window.getAuthState ? window.getAuthState() : null;
+    setTimeout(async () => {
+        const authState = window.getAuthState ? await window.getAuthState() : null;
         if (authState && authState.token && !socket) {
             initializeSocket();
         }
@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Initialize Socket.IO when user logs in
-function initializeSocket() {
-    const authState = window.getAuthState ? window.getAuthState() : null;
+async function initializeSocket() {
+    const authState = window.getAuthState ? await window.getAuthState() : null;
     if (!authState || !authState.token) return;
 
     socket = io('http://localhost:3000', {
@@ -84,7 +84,7 @@ function updateStarDisplay(stars, rating, color = null) {
 
 // Chat Functions
 async function loadChatRooms() {
-    const authState = window.getAuthState ? window.getAuthState() : null;
+    const authState = window.getAuthState ? await window.getAuthState() : null;
     try {
         const response = await window.apiCall('/chat/rooms');
         const roomsList = document.getElementById('chatRoomsList');
@@ -142,8 +142,8 @@ async function openChatRoom(roomId, propertyTitle, otherUserName) {
     event.target.closest('.chat-room-item')?.classList.add('active');
 }
 
-function appendMessage(messageData) {
-    const authState = window.getAuthState ? window.getAuthState() : null;
+async function appendMessage(messageData) {
+    const authState = window.getAuthState ? await window.getAuthState() : null;
     const messagesContainer = document.getElementById('chatMessages');
     const isSent = messageData.sender_id === authState.user.id;
 
@@ -205,6 +205,11 @@ async function startChatWithOwner(propertyId, ownerId) {
         return;
     }
 
+    // Close property detail modal if open
+    if (typeof window.closeModal === 'function') {
+        window.closeModal('propertyDetailModal');
+    }
+
     try {
         const response = await window.apiCall('/chat/rooms', 'POST', { property_id: propertyId });
 
@@ -225,7 +230,6 @@ async function startChatWithOwner(propertyId, ownerId) {
 // Reviews Functions
 async function openReviewModal(propertyId) {
     const authState = window.getAuthState ? await window.getAuthState() : null;
-
     if (!authState || !authState.user) {
         if (typeof showNotification === 'function') {
             showNotification('Debes iniciar sesión para dejar una reseña', 'warning');
@@ -235,25 +239,28 @@ async function openReviewModal(propertyId) {
         }
         return;
     }
-
-    const propertyIdInput = document.getElementById('reviewPropertyId');
-    const ratingInput = document.getElementById('ratingValue');
-
-    if (propertyIdInput) {
-        propertyIdInput.value = propertyId;
-    }
-
-    selectedRating = 0;
-
-    if (ratingInput) {
-        ratingInput.value = '';
-    }
-
-    document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
-
+    // Primero abrir el modal
     if (typeof openModal === 'function') {
         openModal('reviewModal');
     }
+    // Esperar a que el modal se cargue completamente
+    setTimeout(() => {
+        const propertyIdInput = document.getElementById('reviewPropertyId');
+        const ratingInput = document.getElementById('ratingValue');
+
+        if (propertyIdInput) {
+            propertyIdInput.value = propertyId;
+        } else {
+            console.error('❌ reviewPropertyId input element not found');
+        }
+        selectedRating = 0;
+        if (ratingInput) {
+            ratingInput.value = '';
+        }
+        document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+        // Re-initialize star rating
+        initializeStarRating();
+    }, 100);
 }
 
 async function handleSubmitReview(event) {

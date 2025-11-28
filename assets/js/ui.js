@@ -74,7 +74,7 @@ export async function ensureComponentLoaded(componentName) {
         },
         'chat': {
             id: 'chat-container',
-            file: './components/chat.html', 
+            file: './components/chat.html',
         },
         'loginModal': {
             id: 'modals-container',
@@ -104,11 +104,11 @@ export async function ensureComponentLoaded(componentName) {
         'footer': {
             id: 'footer',
             file: './components/footer.html'
-        },    
+        },
     };
 
 
-    
+
     // Load shared CSS dependencies first
     if (cssDependencies[componentName]) {
         cssDependencies[componentName].forEach(css => loadCSS(css));
@@ -206,40 +206,40 @@ export async function showSection(section) {
 // Función para cargar contenido específico de cada sección
 async function loadSectionContent(section) {
     console.log(`Loading content for section: ${section}`);
-    
+
     switch (section) {
         case 'properties':
             if (typeof window.loadProperties === 'function') {
                 await window.loadProperties();
             }
             break;
-            
+
         case 'favorites':
             if (typeof window.loadFavorites === 'function') {
                 await window.loadFavorites();
             }
             break;
-            
+
         case 'my-properties':
             if (typeof window.loadMyProperties === 'function') {
                 await window.loadMyProperties();
             }
             break;
-            
+
         case 'chat':
             // Pequeño delay para asegurar que el DOM esté listo
             setTimeout(async () => {
                 console.log('Initializing chat section...');
-                
+
                 // Verificar que los elementos del chat existan
                 const roomsList = document.getElementById('chatRoomsList');
                 const chatMessages = document.getElementById('chatMessages');
-                
+
                 console.log('Chat elements:', {
                     roomsList: !!roomsList,
                     chatMessages: !!chatMessages
                 });
-                
+
                 if (typeof window.loadChatRooms === 'function') {
                     console.log('loadChatRooms function found, calling...');
                     await window.loadChatRooms();
@@ -276,6 +276,15 @@ export function closeModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
         modal.classList.remove('active');
+
+        // Reset any forms inside the modal
+        const forms = modal.querySelectorAll('form');
+        forms.forEach(form => form.reset());
+
+        // Reset star ratings if present (remove active class)
+        const stars = modal.querySelectorAll('.star');
+        stars.forEach(star => star.classList.remove('active'));
+
     } else {
         // Removed console.error; notify user visually if needed
         if (typeof showNotification === 'function') {
