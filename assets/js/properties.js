@@ -1,7 +1,3 @@
-// ============================================
-// PROPERTIES.JS - Properties Management
-// ============================================
-
 import { showNotification } from './ui.js';
 
 // Properties state
@@ -13,7 +9,7 @@ let propertiesState = {
 
 
 // Get API_URL from global scope
-const API_URL = window.API_URL || 'http://localhost:3000/api';
+const API_URL = 'https://nearby-frontend-50an.onrender.com/api';
 
 // Load properties with filters
 export async function loadProperties(filters = {}) {
