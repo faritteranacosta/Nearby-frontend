@@ -9,7 +9,7 @@ let authModule = null;
 let propertiesModule = null;
 
 // Configuration
-const API_URL = 'https://nearby-frontend-50an.onrender.com/#/api';
+const API_URL = 'https://nearby-frontend-50an.onrender.com/api';
 
 // Make API_URL globally accessible
 window.API_URL = API_URL;
