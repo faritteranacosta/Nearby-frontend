@@ -1,0 +1,118 @@
+<!-- Properties Section -->
+<section class="properties-section hidden" id="propertiesSection">
+    <div class="container">
+        <div class="section-header">
+            <h2>Alojamientos Disponibles</h2>
+            <p>Encuentra tu hogar ideal cerca del campus</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+            <select class="filter-btn" id="filterType" onchange="applyFilters()">
+                <option value="">Todos los tipos</option>
+                <option value="apartment">Apartamento</option>
+                <option value="house">Casa</option>
+                <option value="room">Habitación</option>
+                <option value="studio">Estudio</option>
+            </select>
+
+            <select class="filter-btn" id="filterBedrooms" onchange="applyFilters()">
+                <option value="">Habitaciones</option>
+                <option value="1">1+</option>
+                <option value="2">2+</option>
+                <option value="3">3+</option>
+            </select>
+
+            <select class="filter-btn" id="filterPrice" onchange="applyFilters()">
+                <option value="">Precio</option>
+                <option value="0-500000">Hasta $500,000</option>
+                <option value="500000-1000000">$500,000 - $1,000,000</option>
+                <option value="1000000-1500000">$1,000,000 - $1,500,000</option>
+                <option value="1500000-999999999">Más de $1,500,000</option>
+            </select>
+
+            <input type="text" class="filter-btn" id="filterSearch" placeholder="Buscar..." onkeyup="applyFilters()"
+                style="min-width: 200px;">
+        </div>
+
+        <!-- Properties Grid -->
+        <div class="properties-grid" id="propertiesGrid">
+            <div class="spinner"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Favorites Section -->
+<section class="properties-section hidden" id="favoritesSection">
+    <div class="container">
+        <div class="section-header">
+            <h2>Mis Favoritos</h2>
+            <p>Propiedades que has guardado</p>
+        </div>
+
+        <div class="properties-grid" id="favoritesGrid">
+            <div class="spinner"></div>
+        </div>
+    </div>
+</section>
+
+<!-- My Properties Section (Owner Only) -->
+<section class="properties-section hidden" id="myPropertiesSection">
+    <div class="container">
+        <div class="section-header">
+            <h2>Mis Propiedades</h2>
+            <p>Gestiona tus publicaciones</p>
+            <button class="btn btn-primary" onclick="openModal('createPropertyModal')">
+                + Nueva Propiedad
+            </button>
+        </div>
+
+        <div class="properties-grid" id="myPropertiesGrid">
+            <div class="spinner"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Chat Section -->
+<section class="properties-section hidden" id="chatSection">
+    <div class="container">
+        <div class="section-header">
+            <h2><i class="fas fa-comments"></i> Mensajes</h2>
+            <p>Conversaciones con propietarios y estudiantes</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 300px 1fr; gap: var(--spacing-lg); min-height: 600px;">
+            <!-- Chat Rooms List -->
+            <div class="glass-card" style="padding: var(--spacing-md); overflow-y: auto;">
+                <h4 style="margin-bottom: var(--spacing-md);">Conversaciones</h4>
+                <div id="chatRoomsList">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="glass-card" style="padding: 0; display: flex; flex-direction: column;">
+                <div id="chatHeader"
+                    style="padding: var(--spacing-md); border-bottom: 1px solid rgba(139, 92, 246, 0.2);">
+                    <p style="color: var(--text-muted);">Selecciona una conversación</p>
+                </div>
+                <div id="chatMessages"
+                    style="flex: 1; padding: var(--spacing-md); overflow-y: auto; max-height: 450px;">
+                    <!-- Messages will appear here -->
+                </div>
+                <div id="chatInput" class="hidden"
+                    style="padding: var(--spacing-md); border-top: 1px solid rgba(139, 92, 246, 0.2);">
+                    <div style="display: flex; gap: var(--spacing-sm);">
+                        <input type="text" id="messageInput" class="form-control" placeholder="Escribe un mensaje..."
+                            onkeypress="handleMessageKeyPress(event)">
+                        <button class="btn btn-primary" onclick="sendChatMessage()">Enviar</button>
+                    </div>
+                    <div id="typingIndicator" class="hidden"
+                        style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">
+                        <em>Escribiendo...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,23 @@
+/* Review Modal Styles */
+#reviewModal .modal-content {
+    max-width: 500px;
+}
+
+.star-rating {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 2rem;
+    margin: var(--spacing-sm) 0;
+}
+
+.star {
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all var(--transition-fast);
+}
+
+.star:hover,
+.star.active {
+    color: #FFD700;
+    transform: scale(1.2);
+}

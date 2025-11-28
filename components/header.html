@@ -1,0 +1,25 @@
+<!-- Navigation -->
+<nav class="navbar" id="navbar">
+    <div class="container">
+        <div class="nav-content">
+            <a href="#" class="logo" onclick="showSection('home')">
+                <img src="assets/logo.png" alt="Nearby Logo">
+                <span>Nearby</span>
+            </a>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#" onclick="showSection('home')">Inicio</a></li>
+                <li><a href="#" onclick="showSection('properties')">Alojamientos</a></li>
+                <li class="auth-only hidden"><a href="#" onclick="showSection('favorites')">Favoritos</a></li>
+                <li class="auth-only hidden"><a href="#" onclick="showSection('chat')"><i class="fas fa-comments"></i>
+                        Chat</a></li>
+                <li class="owner-only hidden"><a href="#" onclick="showSection('my-properties')">Mis Propiedades</a>
+                </li>
+                <li class="guest-only"><a href="#" onclick="openModal('loginModal')">Iniciar Sesión</a></li>
+                <li class="guest-only"><a href="#" class="btn btn-primary"
+                        onclick="openModal('registerModal')">Registrarse</a></li>
+                <li class="auth-only hidden"><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>

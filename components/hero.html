@@ -1,0 +1,201 @@
+<!-- Hero Section -->
+<section class="hero" id="homeSection">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Tu espacio ideal, a un clic del campus</h1>
+            <p>Encuentra el alojamiento perfecto cerca de la Universidad del Magdalena. Seguro, verificado y fácil.</p>
+
+            <div class="search-box">
+                <input type="text" id="heroSearch" placeholder="Buscar por ubicación, tipo de propiedad..."
+                    onkeyup="handleHeroSearch(event)">
+                <button class="btn btn-primary" onclick="searchFromHero()">
+                    <span><i class="fas fa-search"></i></span> Buscar
+                </button>
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
+                <button class="btn btn-primary" onclick="showSection('properties')">
+                    Explorar Alojamientos
+                </button>
+                <button class="btn btn-secondary owner-only hidden" onclick="openModal('createPropertyModal')">
+                    Publicar Propiedad
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mover todas las nuevas secciones DENTRO de homeSection -->
+    <!-- Stats Section -->
+    <div class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Propiedades Listadas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1,200+</div>
+                    <div class="stat-label">Estudiantes Alojados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Satisfacción</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Soporte</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>¿Por qué elegir Nearby?</h2>
+                <p>La plataforma más confiable para estudiantes de la Universidad del Magdalena</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Verificado y Seguro</h3>
+                    <p>Todas las propiedades y propietarios son verificados para tu seguridad y tranquilidad.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Cerca del Campus</h3>
+                    <p>Encuentra alojamientos a pocos minutos de la Universidad del Magdalena.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-search-dollar"></i>
+                    </div>
+                    <h3>Precios Transparentes</h3>
+                    <p>Sin sorpresas. Todos los costos están claramente especificados desde el inicio.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Chat Directo</h3>
+                    <p>Comunícate directamente con propietarios sin intermediarios.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2>¿Cómo funciona?</h2>
+                <p>Encuentra tu hogar ideal en 3 simples pasos</p>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Busca y Filtra</h3>
+                    <p>Encuentra propiedades cerca de tu universidad usando nuestros filtros avanzados.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Conecta</h3>
+                    <p>Chatea directamente con propietarios y agenda visitas.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Alójate</h3>
+                    <p>Firma tu contrato y disfruta de tu nuevo hogar cerca del campus.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Us Section -->
+    <div class="about-section">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content">
+                    <h2>¿Quiénes Somos?</h2>
+                    <p>Nearby nació de la necesidad de conectar a estudiantes de la Universidad del Magdalena con
+                        opciones de alojamiento seguras, verificadas y cercanas al campus.</p>
+                    <p>Somos un equipo de ex-estudiantes que entendemos los desafíos de encontrar un buen lugar para
+                        vivir durante la vida universitaria.</p>
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Propiedades 100% verificadas</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Atención personalizada 24/7</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Comunidad universitaria confiable</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="visual-card">
+                        <i class="fas fa-university"></i>
+                        <h4>Especialistas en Vida Universitaria</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Preguntas Frecuentes</h2>
+                <p>Resolvemos tus dudas sobre el proceso de alquiler</p>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>¿Cómo verifican las propiedades?</h3>
+                    <p>Visitamos personalmente cada propiedad y verificamos documentos del propietario para garantizar
+                        tu seguridad.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>¿Puedo visitar la propiedad antes de alquilar?</h3>
+                    <p>¡Sí! Coordina visitas directamente con el propietario a través de nuestro sistema de chat.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>¿Qué documentos necesito para alquilar?</h3>
+                    <p>Generalmente necesitas cédula, código estudiantil y un fiador. Los requisitos varían por
+                        propiedad.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>¿Hay costos adicionales?</h3>
+                    <p>Todos los costos están especificados en el listado. No cobramos comisiones a estudiantes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>¿Listo para encontrar tu hogar ideal?</h2>
+                <p>Únete a miles de estudiantes que ya encontraron su espacio perfecto cerca del campus</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" onclick="showSection('properties')">
+                        Explorar Propiedades
+                    </button>
+                    <button class="btn btn-outline" onclick="openModal('registerModal')">
+                        Crear Cuenta Gratis
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

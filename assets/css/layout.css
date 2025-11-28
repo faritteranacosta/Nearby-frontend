@@ -1,0 +1,176 @@
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    position: relative;
+    z-index: 1;
+}
+
+/* Section Header */
+.section-header {
+    color: #A78BFA;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 80px;
+}
+
+/* Properties Grid */
+.properties-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Filters Layout */
+.filters {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .nav-links {
+        gap: 1rem;
+    }
+
+    .properties-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .search-box {
+        flex-direction: column;
+    }
+
+    .filters {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 var(--spacing-sm);
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Modal Layout Improvements */
+@media (min-width: 768px) {
+    .modal-content {
+        max-width: 1100px;
+        display: flex;
+        flex-direction: column;
+        max-height: 95vh;
+    }
+
+    .modal-body {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: var(--spacing-lg);
+        overflow-y: auto;
+        padding: var(--spacing-lg);
+    }
+
+    .image-carousel {
+        height: 100%;
+        max-height: 500px;
+        position: sticky;
+        top: 0;
+    }
+
+    .modal-body>img {
+        height: 100%;
+        max-height: 500px;
+        object-fit: cover;
+        position: sticky;
+        top: 0;
+    }
+}
+
+
+
+
+/* Scroll personalizado para TODOS los elementos */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(139, 92, 246, 0.1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-purple);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-purple);
+}
+
+/* Para Firefox - aplicar a todos los elementos */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-purple) rgba(139, 92, 246, 0.1);
+}
+
+/* Scroll específico para modales y contenedores con mucho contenido */
+.modal-body,
+.property-details-column,
+.faq-section,
+.about-content,
+.features-grid,
+.steps-grid {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-purple) rgba(139, 92, 246, 0.1);
+}
+
+/* Scroll específico para el body de la página */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-purple) rgba(139, 92, 246, 0.1);
+}
+
+/* Para elementos específicos que necesiten scroll vertical */
+.scrollable-content {
+    overflow-y: auto;
+}
+
+.scrollable-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scrollable-content::-webkit-scrollbar-track {
+    background: rgba(139, 92, 246, 0.05);
+    border-radius: 3px;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb {
+    background: var(--primary-purple);
+    border-radius: 3px;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-purple);
+}

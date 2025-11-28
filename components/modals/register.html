@@ -1,0 +1,60 @@
+<div id="registerModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Crear Cuenta</h3>
+            <button class="close-btn" onclick="closeModal('registerModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="registerForm" class="auth-form" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="registerName">Nombre Completo</label>
+                    <input type="text" id="registerName" name="name" class="form-control" placeholder="Juan Pérez"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="registerEmail">Correo Electrónico</label>
+                    <input type="email" id="registerEmail" name="email" class="form-control" placeholder="tu@gmail.com"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="registerPhone">Teléfono</label>
+                    <input type="tel" id="registerPhone" name="phone" class="form-control"
+                        placeholder="+57 300 123 4567">
+                </div>
+
+                <div class="form-group">
+                    <label for="registerPassword">Contraseña</label>
+                    <input type="password" id="registerPassword" name="password" class="form-control" required
+                        minlength="6" placeholder="Mínimo 6 caracteres">
+                </div>
+
+                <div class="form-group">
+                    <label for="registerUserType">Tipo de Usuario</label>
+                    <select id="registerUserType" name="user_type" class="form-control" required>
+                        <option value="">Selecciona un tipo</option>
+                        <option value="student">Estudiante</option>
+                        <option value="owner">Propietario</option>
+                    </select>
+                </div>
+
+                <div id="studentIdGroup" class="form-group hidden">
+                    <label for="studentId">ID de Estudiante (Opcional)</label>
+                    <input type="text" id="studentId" name="student_id" class="form-control" placeholder="Ej: A123456">
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Crear Cuenta
+                </button>
+            </form>
+
+            <p style="text-align: center; margin-top: 1.5rem; color: var(--text-secondary);">
+                ¿Ya tienes cuenta?
+                <a onclick="closeModal('registerModal'); openModal('loginModal');" class="form-link">
+                    Inicia sesión aquí
+                </a>
+            </p>
+        </div>
+    </div>
+</div>

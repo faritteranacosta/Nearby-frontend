@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Wait a bit for state to be loaded
     setTimeout(() => {
-        if (typeof state !== 'undefined' && state && state.token && !socket) {
+        const authState = window.getAuthState ? window.getAuthState() : null;
+        if (authState && authState.token && !socket) {
             initializeSocket();
         }
     }, 500);
@@ -17,11 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Initialize Socket.IO when user logs in
 function initializeSocket() {
-    if (!state || !state.token) return;
+    const authState = window.getAuthState ? window.getAuthState() : null;
+    if (!authState || !authState.token) return;
 
-    socket = io('https://backend-nearby-86jj.onrender.com', {
+    socket = io('http://localhost:3000', {
         auth: {
-            token: state.token
+            token: authState.token
         }
     });
 
@@ -41,7 +43,8 @@ function initializeSocket() {
     });
 
     socket.on('user_typing', (data) => {
-        if (currentRoom && data.userId !== state.user.id) {
+        const authState = window.getAuthState ? window.getAuthState() : null;
+        if (currentRoom && authState && data.userId !== authState.user.id) {
             const indicator = document.getElementById('typingIndicator');
             if (indicator) {
                 indicator.classList.remove('hidden');
@@ -103,8 +106,9 @@ function updateStarDisplay(stars, rating, color = null) {
 
 // Chat Functions
 async function loadChatRooms() {
+    const authState = window.getAuthState ? window.getAuthState() : null;
     try {
-        const response = await apiCall('/chat/rooms');
+        const response = await window.apiCall('/chat/rooms');
         const roomsList = document.getElementById('chatRoomsList');
 
         if (response.rooms.length === 0) {
@@ -113,12 +117,12 @@ async function loadChatRooms() {
         }
 
         roomsList.innerHTML = response.rooms.map(room => `
-            <div class="chat-room-item" onclick="openChatRoom(${room.id}, '${room.property_title}', '${state.user.user_type === 'student' ? room.owner_name : room.student_name}')">
-                <h5>${room.property_title}</h5>
-                <p><strong>${state.user.user_type === 'student' ? room.owner_name : room.student_name}</strong></p>
-                <p>${room.last_message || 'Sin mensajes'}</p>
-            </div>
-        `).join('');
+      <div class="chat-room-item" onclick="openChatRoom(${room.id}, '${room.property_title}', '${authState.user.user_type === 'student' ? room.owner_name : room.student_name}')">
+        <h5>${room.property_title}</h5>
+        <p><strong>${authState.user.user_type === 'student' ? room.owner_name : room.student_name}</strong></p>
+        <p>${room.last_message || 'Sin mensajes'}</p>
+      </div>
+    `).join('');
     } catch (error) {
         console.error('Error loading chat rooms:', error);
     }
@@ -129,9 +133,9 @@ async function openChatRoom(roomId, propertyTitle, otherUserName) {
 
     // Update header
     document.getElementById('chatHeader').innerHTML = `
-        <h4>${propertyTitle}</h4>
-        <p style="color: var(--text-muted); margin: 0;">Chat con ${otherUserName}</p>
-    `;
+    <h4>${propertyTitle}</h4>
+    <p style="color: var(--text-muted); margin: 0;">Chat con ${otherUserName}</p>
+  `;
 
     // Show input
     document.getElementById('chatInput').classList.remove('hidden');
@@ -143,7 +147,7 @@ async function openChatRoom(roomId, propertyTitle, otherUserName) {
 
     // Load messages
     try {
-        const response = await apiCall(`/chat/rooms/${roomId}/messages`);
+        const response = await window.apiCall(`/chat/rooms/${roomId}/messages`);
         const messagesContainer = document.getElementById('chatMessages');
         messagesContainer.innerHTML = '';
 
@@ -161,16 +165,17 @@ async function openChatRoom(roomId, propertyTitle, otherUserName) {
 }
 
 function appendMessage(messageData) {
+    const authState = window.getAuthState ? window.getAuthState() : null;
     const messagesContainer = document.getElementById('chatMessages');
-    const isSent = messageData.sender_id === state.user.id;
+    const isSent = messageData.sender_id === authState.user.id;
 
     const messageDiv = document.createElement('div');
     messageDiv.className = `chat-message ${isSent ? 'sent' : 'received'}`;
     messageDiv.innerHTML = `
-        ${!isSent ? `<div class="sender">${messageData.sender_name}</div>` : ''}
-        <div class="message-text">${messageData.message}</div>
-        <div class="timestamp">${new Date(messageData.created_at).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}</div>
-    `;
+    ${!isSent ? `<div class="sender">${messageData.sender_name}</div>` : ''}
+    <div class="message-text">${messageData.message}</div>
+    <div class="timestamp">${new Date(messageData.created_at).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}</div>
+  `;
 
     messagesContainer.appendChild(messageDiv);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -210,7 +215,9 @@ function handleMessageKeyPress(event) {
 }
 
 async function startChatWithOwner(propertyId, ownerId) {
-    if (!state.user) {
+    const authState = window.getAuthState ? window.getAuthState() : null;
+
+    if (!authState || !authState.user) {
         if (typeof showNotification === 'function') {
             showNotification('Debes iniciar sesión para chatear', 'warning');
         }
@@ -221,7 +228,7 @@ async function startChatWithOwner(propertyId, ownerId) {
     }
 
     try {
-        const response = await apiCall('/chat/rooms', 'POST', { property_id: propertyId });
+        const response = await window.apiCall('/chat/rooms', 'POST', { property_id: propertyId });
 
         if (typeof showSection === 'function') {
             showSection('chat');
@@ -239,7 +246,9 @@ async function startChatWithOwner(propertyId, ownerId) {
 
 // Reviews Functions
 function openReviewModal(propertyId) {
-    if (!state || !state.user) {
+    const authState = window.getAuthState ? window.getAuthState() : null;
+
+    if (!authState || !authState.user) {
         if (typeof showNotification === 'function') {
             showNotification('Debes iniciar sesión para dejar una reseña', 'warning');
         }
@@ -287,7 +296,7 @@ async function handleSubmitReview(event) {
     }
 
     try {
-        await apiCall('/reviews', 'POST', data);
+        await window.apiCall('/reviews', 'POST', data);
 
         if (typeof showNotification === 'function') {
             showNotification('Reseña publicada exitosamente', 'success');
@@ -321,7 +330,7 @@ async function handleSubmitReview(event) {
 
 async function loadPropertyReviews(propertyId) {
     try {
-        const response = await apiCall(`/reviews/property/${propertyId}`);
+        const response = await window.apiCall(`/reviews/property/${propertyId}`);
 
         if (response.reviews.length === 0) {
             return '<p style="color: var(--text-muted);">No hay reseñas aún</p>';
@@ -331,28 +340,28 @@ async function loadPropertyReviews(propertyId) {
         const stars = '★'.repeat(Math.round(avgRating)) + '☆'.repeat(5 - Math.round(avgRating));
 
         let html = `
-            <div style="background: var(--bg-card); padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-md);">
-                <h4>Calificación Promedio</h4>
-                <div style="font-size: 2rem; color: #FFD700;">${stars}</div>
-                <p style="color: var(--text-secondary);">${avgRating.toFixed(1)} de 5 (${response.total_reviews} reseñas)</p>
-            </div>
-            <h4>Reseñas</h4>
-        `;
+      <div style="background: var(--bg-card); padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-md);">
+        <h4>Calificación Promedio</h4>
+        <div style="font-size: 2rem; color: #FFD700;">${stars}</div>
+        <p style="color: var(--text-secondary);">${avgRating.toFixed(1)} de 5 (${response.total_reviews} reseñas)</p>
+      </div>
+      <h4>Reseñas</h4>
+    `;
 
         response.reviews.forEach(review => {
             const reviewStars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
             html += `
-                <div class="review-card">
-                    <div class="review-header">
-                        <div>
-                            <div class="review-author">${review.user_name}</div>
-                            <div class="review-rating">${reviewStars}</div>
-                        </div>
-                        <div class="review-date">${new Date(review.created_at).toLocaleDateString('es-CO')}</div>
-                    </div>
-                    ${review.comment ? `<div class="review-comment">${review.comment}</div>` : ''}
-                </div>
-            `;
+        <div class="review-card">
+          <div class="review-header">
+            <div>
+              <div class="review-author">${review.user_name}</div>
+              <div class="review-rating">${reviewStars}</div>
+            </div>
+            <div class="review-date">${new Date(review.created_at).toLocaleDateString('es-CO')}</div>
+          </div>
+          ${review.comment ? `<div class="review-comment">${review.comment}</div>` : ''}
+        </div>
+      `;
         });
 
         return html;

@@ -1,0 +1,17 @@
+/* ===== FILTERS ===== */
+.filter-btn {
+    padding: 0.5rem 1rem;
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: rgba(139, 92, 246, 0.2);
+    border-color: var(--primary-purple);
+    color: var(--primary-purple-light);
+}

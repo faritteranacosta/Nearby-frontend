@@ -1,0 +1,35 @@
+/* ===== CHAT ===== */
+.chat-room-item {
+    padding: var(--spacing-sm);
+    background: rgba(139, 92, 246, 0.05);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.chat-room-item:hover,
+.chat-room-item.active {
+    background: rgba(139, 92, 246, 0.15);
+    border-color: var(--primary-purple);
+}
+
+.chat-message {
+    margin-bottom: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-md);
+    max-width: 70%;
+    animation: fadeIn 0.3s ease;
+}
+
+.chat-message.sent {
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-purple-dark) 100%);
+    margin-left: auto;
+    text-align: right;
+}
+
+.chat-message.received {
+    background: var(--bg-card);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+}

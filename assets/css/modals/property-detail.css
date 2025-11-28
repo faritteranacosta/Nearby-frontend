@@ -1,0 +1,270 @@
+/* Property Detail Modal Styles */
+#propertyDetailModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md);
+    animation: fadeIn 0.3s ease;
+}
+
+#propertyDetailModal.active {
+    display: flex;
+}
+
+.property-modal-content {
+    background: var(--bg-dark);
+    border: 2px solid rgba(139, 92, 246, 0.3);
+    border-radius: var(--radius-lg);
+    max-width: 1000px;
+    width: 95%;
+    height: 90vh;
+    /* Altura fija */
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    animation: slideUp 0.3s ease;
+    overflow: hidden;
+    /* Importante: oculta el scroll general */
+}
+
+/* Header fijo */
+#propertyDetailModal .modal-header {
+    color: var(--primary-purple-light);
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-dark);
+    flex-shrink: 0;
+    /* No se encoge */
+    z-index: 10;
+}
+
+/* Body principal - SIN SCROLL */
+#propertyDetailModal .modal-body {
+    padding: 0;
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    /* Sin scroll aquí */
+}
+
+/* Grid de dos columnas */
+.property-modal-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    height: 100%;
+}
+
+@media (min-width: 1024px) {
+    .property-modal-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Columna de imágenes - SIN SCROLL */
+.property-visuals {
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    background: rgba(139, 92, 246, 0.05);
+    border-right: 1px solid rgba(139, 92, 246, 0.1);
+    overflow: hidden;
+    /* Sin scroll */
+}
+
+@media (min-width: 1024px) {
+    .property-visuals {
+        height: 100%;
+        /* position: sticky; */
+        /* Removido */
+        top: 0;
+    }
+}
+
+/* Columna de detalles - CON SCROLL */
+.property-details-column {
+    color: var(--primary-purple-light);
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    overflow-y: auto;
+    /* Scroll solo aquí */
+    height: 100%;
+    max-height: calc(90vh - 80px);
+    /* Altura máxima considerando header */
+}
+
+/* Asegurar que el contenido de detalles tenga espacio para scroll */
+.property-details-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+/* Image carousel - ajustes */
+.image-carousel {
+    position: relative;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--bg-card);
+    flex-shrink: 0;
+    /* No se encoge */
+}
+
+.carousel-container {
+    display: flex;
+    transition: transform 0.3s ease;
+    width: 100%;
+}
+
+.carousel-slide {
+    min-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+}
+
+/* Single image style */
+.property-visuals img:not(.carousel-slide img) {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
+    /* No se encoge */
+}
+
+/* Responsive */
+@media (max-width: 1023px) {
+    .property-modal-content {
+        width: 98%;
+        height: 95vh;
+    }
+
+    .property-visuals {
+        border-right: none;
+        border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+        max-height: 40vh;
+        /* Limitar altura en móvil */
+        overflow-y: auto;
+        /* Permitir scroll en móvil si es necesario */
+    }
+
+    .property-details-column {
+        max-height: calc(95vh - 80px - 40vh);
+        /* Ajustar altura en móvil */
+    }
+
+    .carousel-slide img {
+        height: 250px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .carousel-slide img {
+        height: 350px;
+        /* Más alto en desktop */
+    }
+
+    .property-visuals img:not(.carousel-slide img) {
+        height: 350px;
+    }
+}
+
+/* Resto de estilos (features-grid, glass-card, contact-info, etc.) se mantienen igual */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.glass-card {
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.contact-info {
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin: 1rem 0;
+}
+
+.action-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+#propertyDetailModal .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    /* X blanca */
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+    padding: 0.5rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+#propertyDetailModal .close-btn:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
