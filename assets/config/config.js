@@ -1,7 +1,7 @@
 // Configuración global
 const CONFIG = {
-    API_URL: 'http://localhost:3000/api',
-    SOCKET_URL: 'http://localhost:3000'
+    API_URL: 'https://backend-nearby-86jj.onrender.com/api',
+    SOCKET_URL: 'https://backend-nearby-86jj.onrender.com'
 };
 // Exportar para módulos
 export default CONFIG;
