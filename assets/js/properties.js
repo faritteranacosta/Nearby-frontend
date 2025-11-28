@@ -1,7 +1,3 @@
-// ============================================
-// PROPERTIES.JS - Properties Management
-// ============================================
-
 import { showNotification } from './ui.js';
 
 // Properties state
@@ -118,7 +114,7 @@ export async function showPropertyDetail(propertyId) {
              style="width: 100%; border-radius: var(--radius-md); margin-bottom: 1rem;" 
              onerror="this.src='images/property1.png'">`;
 
-    const authState = window.getAuthState ? window.getAuthState() : { user: null };
+    const authState = window.getAuthState ? await window.getAuthState() : { user: null };
 
     const content = `
     <div class="property-modal-grid">
@@ -235,7 +231,7 @@ export async function showPropertyDetail(propertyId) {
 
 // Toggle favorite
 export async function toggleFavorite(propertyId) {
-  const authState = window.getAuthState ? window.getAuthState() : { user: null };
+  const authState = window.getAuthState ? await window.getAuthState() : { user: null };
 
   if (!authState.user) {
     showNotification('Debes iniciar sesión para guardar favoritos', 'warning');
@@ -284,12 +280,33 @@ export async function loadMyProperties() {
 export async function handleCreateProperty(event) {
   event.preventDefault();
 
-  const authState = window.getAuthState ? window.getAuthState() : { user: null };
+  const authState = window.getAuthState ? await window.getAuthState() : { user: null };
+
+  // 🔍 DIAGNÓSTICO - Logging detallado
+  console.log('🔍 === DIAGNÓSTICO DE CREACIÓN DE PROPIEDAD ===');
+  console.log('1. window.getAuthState existe?', typeof window.getAuthState);
+  console.log('2. authState completo:', authState);
+  console.log('3. authState.user:', authState.user);
+  console.log('4. authState.user?.user_type:', authState.user?.user_type);
+  console.log('5. Tipo de user_type:', typeof authState.user?.user_type);
+  console.log('6. Comparación estricta:', authState.user?.user_type === 'owner');
+  console.log('7. localStorage user:', localStorage.getItem('user'));
+  console.log('8. localStorage user parseado:', JSON.parse(localStorage.getItem('user') || 'null'));
+  console.log('9. window.state:', window.state);
+  console.log('===============================================');
 
   if (!authState.user || authState.user.user_type !== 'owner') {
+    console.error('❌ VALIDACIÓN FALLIDA:', {
+      tieneUsuario: !!authState.user,
+      userType: authState.user?.user_type,
+      esperado: 'owner',
+      razon: !authState.user ? 'No hay usuario' : `user_type es "${authState.user.user_type}" en lugar de "owner"`
+    });
     showNotification('Solo los propietarios pueden publicar propiedades', 'error');
     return;
   }
+
+  console.log('✅ Validación exitosa, procediendo a crear propiedad...');
 
   const formData = new FormData(event.target);
 

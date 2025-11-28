@@ -1,4 +1,3 @@
-
 // Track loaded components to avoid reloading
 const loadedComponents = new Set();
 
@@ -19,7 +18,11 @@ async function loadComponent(id, file) {
             return true;
         }
     } catch (error) {
-        console.error(`Error loading ${file}:`, error);
+        // Removed console.error to avoid leaking logs
+        // Optionally notify the user if the UI should show a failure
+        if (typeof showNotification === 'function') {
+            showNotification(`Error cargando componente: ${file}`, 'error');
+        }
         return false;
     }
 }
@@ -55,6 +58,7 @@ const cssDependencies = {
     'createPropertyModal': ['assets/css/components/forms.css', 'assets/css/components/buttons.css'],
     'propertyDetailModal': ['assets/css/components/carousel.css', 'assets/css/components/buttons.css', 'assets/css/components/cards.css'],
     'reviewModal': ['assets/css/components/reviews.css', 'assets/css/components/forms.css', 'assets/css/components/buttons.css'],
+    'chat': ['assets/css/components/chat.css', 'assets/css/components/cards.css'],
 };
 
 // Ensure a specific component is loaded
@@ -64,12 +68,14 @@ export async function ensureComponentLoaded(componentName) {
             id: 'hero',
             file: './components/hero.html',
         },
-
         'properties': {
             id: 'properties-container',
             file: './components/properties.html',
         },
-        // Modals are now handled individually
+        'chat': {
+            id: 'chat-container',
+            file: './components/chat.html', 
+        },
         'loginModal': {
             id: 'modals-container',
             file: './components/modals/login.html',
@@ -98,9 +104,11 @@ export async function ensureComponentLoaded(componentName) {
         'footer': {
             id: 'footer',
             file: './components/footer.html'
-        }
+        },    
     };
 
+
+    
     // Load shared CSS dependencies first
     if (cssDependencies[componentName]) {
         cssDependencies[componentName].forEach(css => loadCSS(css));
@@ -134,11 +142,14 @@ export async function ensureComponentLoaded(componentName) {
                 if (modalElement) {
                     container.appendChild(modalElement);
                     loadedComponents.add(componentName);
-                    console.log(`Modal ${componentName} loaded successfully`);
+                    // Removed debug log
                     return true;
                 }
             } catch (error) {
-                console.error(`Error loading ${component.file}:`, error);
+                // Removed console.error; show notification for user-facing feedback
+                if (typeof showNotification === 'function') {
+                    showNotification(`Error cargando modal: ${component.file}`, 'error');
+                }
                 return false;
             }
         } else {
@@ -146,17 +157,21 @@ export async function ensureComponentLoaded(componentName) {
         }
     }
 
-    console.warn(`Component ${componentName} not found in componentMap`);
+    // Removed console.warn; optional user notification
     return false;
 }
 
 // Section Navigation with lazy loading
 export async function showSection(section) {
+    // Removed debug console.log
+
     // Lazy load components based on section
     if (section === 'home') {
         await ensureComponentLoaded('hero');
-    } else if (['properties', 'favorites', 'my-properties', 'chat'].includes(section)) {
+    } else if (['properties', 'favorites', 'my-properties'].includes(section)) {
         await ensureComponentLoaded('properties');
+    } else if (section === 'chat') {
+        await ensureComponentLoaded('chat');  // Cargar componente chat específico
     }
 
     // Hide all sections
@@ -181,7 +196,67 @@ export async function showSection(section) {
             if (typeof window.onSectionChange === 'function') {
                 await window.onSectionChange(section);
             }
+
+            // Cargar contenido específico de cada sección
+            await loadSectionContent(section);
         }
+    }
+}
+
+// Función para cargar contenido específico de cada sección
+async function loadSectionContent(section) {
+    console.log(`Loading content for section: ${section}`);
+    
+    switch (section) {
+        case 'properties':
+            if (typeof window.loadProperties === 'function') {
+                await window.loadProperties();
+            }
+            break;
+            
+        case 'favorites':
+            if (typeof window.loadFavorites === 'function') {
+                await window.loadFavorites();
+            }
+            break;
+            
+        case 'my-properties':
+            if (typeof window.loadMyProperties === 'function') {
+                await window.loadMyProperties();
+            }
+            break;
+            
+        case 'chat':
+            // Pequeño delay para asegurar que el DOM esté listo
+            setTimeout(async () => {
+                console.log('Initializing chat section...');
+                
+                // Verificar que los elementos del chat existan
+                const roomsList = document.getElementById('chatRoomsList');
+                const chatMessages = document.getElementById('chatMessages');
+                
+                console.log('Chat elements:', {
+                    roomsList: !!roomsList,
+                    chatMessages: !!chatMessages
+                });
+                
+                if (typeof window.loadChatRooms === 'function') {
+                    console.log('loadChatRooms function found, calling...');
+                    await window.loadChatRooms();
+                } else {
+                    console.error('loadChatRooms function not found');
+                    // Mostrar error en la interfaz
+                    if (roomsList) {
+                        roomsList.innerHTML = `
+                            <div style="text-align: center; color: var(--error); padding: 2rem;">
+                                <p>Error: Función de chat no disponible</p>
+                                <button class="btn btn-outline" onclick="location.reload()">Recargar</button>
+                            </div>
+                        `;
+                    }
+                }
+            }, 200);
+            break;
     }
 }
 
@@ -197,12 +272,15 @@ export async function openModal(modalId) {
 }
 
 export function closeModal(modalId) {
-    console.log('Closing modal:', modalId);
+    // Removed debug console.log
     const modal = document.getElementById(modalId);
     if (modal) {
         modal.classList.remove('active');
     } else {
-        console.error('Modal not found:', modalId);
+        // Removed console.error; notify user visually if needed
+        if (typeof showNotification === 'function') {
+            showNotification('Modal no encontrado', 'warning');
+        }
     }
 }
 
@@ -268,4 +346,5 @@ export function initializeUI() {
 window.showSection = showSection;
 window.openModal = openModal;
 window.closeModal = closeModal;
+window.showNotification = showNotification;
 window.ensureComponentLoaded = ensureComponentLoaded;

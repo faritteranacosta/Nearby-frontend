@@ -10,6 +10,13 @@ let state = {
     currentSection: 'home'
 };
 
+function getAuthState() {
+    return {
+        user: state.user,
+        token: state.token
+    };
+}
+
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
     loadUserFromStorage();
@@ -134,10 +141,12 @@ async function handleLogin(event) {
     }
 }
 
-async function handleRegister(event) {
+async function handleRegister(event) {  
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
+
+    console.log('📝 Datos de registro:', data);
 
     try {
         const response = await apiCall('/auth/register', 'POST', data);
@@ -145,6 +154,9 @@ async function handleRegister(event) {
         state.user = response.user;
         saveUserToStorage();
         updateUI();
+        
+        console.log('✅ Usuario registrado:', state.user);
+        
         // Initialize Socket.IO for chat
         if (typeof initializeSocket === 'function') {
             initializeSocket();
@@ -619,3 +631,11 @@ window.goToSlide = function (propertyId, index) {
         }
     });
 };
+
+// Make it global
+window.state = state;
+window.getAuthState = getAuthState;
+window.showSection = showSection;
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.showNotification = showNotification;

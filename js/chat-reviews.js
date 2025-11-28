@@ -36,28 +36,6 @@ function initializeSocket() {
             appendMessage(messageData);
         } else {
             // Show notification if not in current room
-            if (typeof showNotification === 'function') {
-                showNotification('Nuevo mensaje recibido', 'info');
-            }
-        }
-    });
-
-    socket.on('user_typing', (data) => {
-        const authState = window.getAuthState ? window.getAuthState() : null;
-        if (currentRoom && authState && data.userId !== authState.user.id) {
-            const indicator = document.getElementById('typingIndicator');
-            if (indicator) {
-                indicator.classList.remove('hidden');
-                setTimeout(() => {
-                    indicator.classList.add('hidden');
-                }, 2000);
-            }
-        }
-    });
-
-    socket.on('error', (error) => {
-        if (typeof showNotification === 'function') {
-            showNotification(error.message, 'error');
         }
     });
 }
@@ -215,7 +193,7 @@ function handleMessageKeyPress(event) {
 }
 
 async function startChatWithOwner(propertyId, ownerId) {
-    const authState = window.getAuthState ? window.getAuthState() : null;
+    const authState = window.getAuthState ? await window.getAuthState() : null;
 
     if (!authState || !authState.user) {
         if (typeof showNotification === 'function') {
@@ -245,8 +223,8 @@ async function startChatWithOwner(propertyId, ownerId) {
 }
 
 // Reviews Functions
-function openReviewModal(propertyId) {
-    const authState = window.getAuthState ? window.getAuthState() : null;
+async function openReviewModal(propertyId) {
+    const authState = window.getAuthState ? await window.getAuthState() : null;
 
     if (!authState || !authState.user) {
         if (typeof showNotification === 'function') {

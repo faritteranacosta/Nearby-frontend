@@ -1,27 +1,27 @@
 # 🏗️ Arquitectura Modular - Frontend Nearby
 
-## 📖 Resumen
+##  Resumen
 
 Este proyecto ha sido completamente refactorizado desde una arquitectura monolítica a una arquitectura modular, escalable y mantenible. El código se organizó siguiendo las mejores prácticas de desarrollo frontend.
 
 ## 📊 Mejoras Alcanzadas
 
 ### Antes
-- ❌ `index.html`: 425 líneas  
-- ❌ `styles.css`: 907 líneas  
-- ❌ `app.js`: 622 líneas  
-- ❌ Código difícil de mantener
-- ❌ Sin separación de responsabilidades
+- `index.html`: 425 líneas  
+- `styles.css`: 907 líneas  
+- `app.js`: 622 líneas  
+- Código difícil de mantener
+- Sin separación de responsabilidades
 
 ### Después
-- ✅ `index.html`: 52 líneas (88% menos código)
-- ✅ CSS modularizado en 5 archivos especializados
-- ✅ JavaScript organizado en 5 módulos ES6
-- ✅ Componentes HTML reutilizables
-- ✅ Separación clara de responsabilidades
-- ✅ Fácil mantenimiento y escalabilidad
+- `index.html`: 52 líneas (88% menos código)
+- CSS modularizado en 5 archivos especializados
+- JavaScript organizado en 5 módulos ES6
+- Componentes HTML reutilizables
+- Separación clara de responsabilidades
+- Fácil mantenimiento y escalabilidad
 
-## 📁 Nueva Estructura
+## Estructura
 
 ```
 /frontend

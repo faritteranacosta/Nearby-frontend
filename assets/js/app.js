@@ -1,7 +1,3 @@
-// ============================================
-// APP.JS - Main Application Entry Point
-// ============================================
-
 import { loadInitialComponents, initializeUI } from './ui.js';
 
 // Module cache for dynamic imports
@@ -67,7 +63,6 @@ async function apiCall(endpoint, method = 'GET', body = null, isFormData = false
 
         return data;
     } catch (error) {
-        console.error('API Error:', error);
         if (typeof window.showNotification === 'function') {
             window.showNotification(error.message, 'error');
         }
@@ -101,12 +96,6 @@ async function onSectionChange(section) {
     }
 }
 
-// Make onSectionChange globally accessible
-window.onSectionChange = onSectionChange;
-
-// Expose getAuthState globally
-window.getAuthState = getAuthState;
-
 // Initialize application with lazy loading and code splitting
 async function initApp() {
     try {
@@ -131,9 +120,18 @@ async function initApp() {
         }
 
     } catch (error) {
-        console.error('Error initializing application:', error);
+        // Removed console.error; show a lightweight user notification
+        if (typeof window.showNotification === 'function') {
+            window.showNotification('Error inicializando la aplicación', 'error');
+        }
     }
 }
+
+
+// Make onSectionChange globally accessible
+window.onSectionChange = onSectionChange;
+// Expose getAuthState globally
+window.getAuthState = getAuthState;
 
 // Start app when DOM is ready
 document.addEventListener('DOMContentLoaded', initApp);
